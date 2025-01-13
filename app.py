@@ -7,7 +7,7 @@ st.title("Intelligent Social Media Caption Generator")
 st.write("Upload an image to generate social media captions and hashtags using the Intelligent Caption Generator.")
 
 # Fetch API key from secrets
-api_key = st.secrets["api"]["key"]
+api_key = st.secrets["api_key"]
 
 # Upload image
 uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])

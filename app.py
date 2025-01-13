@@ -1,43 +1,43 @@
 import streamlit as st
-import requests
+import openai
 
 # Streamlit app setup
 st.title("Intelligent Social Media Caption Generator")
-st.write("Upload an image to generate social media captions and hashtags using the Intelligent Caption Generator.")
+st.write("Upload an image to generate social media captions and hashtags using OpenAI's GPT model.")
 
-# Fetch API key from secrets
-api_key = st.secrets["api_key"]
+# Fetch OpenAI API key from secrets
+api_key = st.secrets["api_key"]  # Add your OpenAI API key to secrets.toml
+
+# Initialize OpenAI API key
+openai.api_key = openai_api_key
 
 # Upload image
 uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 
+# Generate caption using ChatGPT
+def generate_caption(image_description):
+    """Generate captions using OpenAI's GPT model based on a text description of the image."""
+    prompt = f"Generate a creative caption for the following image. The image contains: {image_description}. Caption:"
+
+    # OpenAI GPT request for caption generation
+    response = openai.Completion.create(
+        model="text-davinci-003",  # Use the appropriate GPT model
+        prompt=prompt,
+        max_tokens=50
+    )
+    return response.choices[0].text.strip()
+
 if uploaded_file:
-    try:
-        # Prepare the image to be sent as a file (multipart/form-data)
-        url = "https://chatgpt.com/g/g-6784114c670081919aa773a672118e24-intelligent-caption-generator"  # Replace with the correct API endpoint URL
-        headers = {"Authorization": f"Bearer {api_key}"}
-        files = {"image": uploaded_file.getvalue()}
-        
-        # Adding action parameter if needed
-        payload = {"action": "generate_captions"}  # Adjust based on API documentation
+    # Step 1: Allow the user to provide a description (since ChatGPT can't process the image itself)
+    image_description = st.text_input("Describe the image", "For example: A cat sitting on a windowsill.")
+    
+    if image_description:
+        # Step 2: Generate a caption using ChatGPT based on the user's description
+        caption = generate_caption(image_description)
 
-        # Make the API request
-        with st.spinner("Generating captions..."):
-            response = requests.post(url, headers=headers, files=files, data=payload)
+        # Step 3: Display the generated caption
+        st.subheader("Generated Caption")
+        st.write(caption)
 
-        # Parse and display the response
-        if response.status_code == 200:
-            captions = response.json().get("captions", [])
-            if captions:
-                st.subheader("Generated Captions")
-                for i, caption in enumerate(captions, start=1):
-                    st.write(f"{i}. {caption}")
-            else:
-                st.warning("No captions were generated. Try with another image.")
-        else:
-            st.error(f"Error: {response.status_code} - {response.text}")
-
-    except Exception as e:
-        st.error(f"An error occurred: {e}")
 else:
-    st.info("Upload an image to generate captions.")
+    st.info("Upload an image and describe it to generate captions.")

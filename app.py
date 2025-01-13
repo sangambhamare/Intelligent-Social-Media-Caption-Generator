@@ -14,13 +14,16 @@ uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 if uploaded_file:
     try:
         # Prepare the image to be sent as a file (multipart/form-data)
-        url = "https://chatgpt.com/g/g-6784114c670081919aa773a672118e24-intelligent-caption-generator"  # Replace with the correct API endpoint URL
+        url = "YOUR_API_URL_HERE"  # Replace with the correct API endpoint URL
         headers = {"Authorization": f"Bearer {api_key}"}
         files = {"image": uploaded_file.getvalue()}
+        
+        # Adding action parameter if needed
+        payload = {"action": "generate_captions"}  # Adjust based on API documentation
 
         # Make the API request
         with st.spinner("Generating captions..."):
-            response = requests.post(url, headers=headers, files=files)
+            response = requests.post(url, headers=headers, files=files, data=payload)
 
         # Parse and display the response
         if response.status_code == 200:

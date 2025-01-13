@@ -19,7 +19,7 @@ if uploaded_file:
         encoded_image = base64.b64encode(image_data).decode("utf-8")
 
         # Send the image to the API
-        url = "https://chatgpt.com/g/g-6784114c670081919aa773a672118e24-intelligent-caption-generator"  # Replace with your API URL
+        url = "https://chatgpt.com/g/g-6784114c670081919aa773a672118e24-intelligent-caption-generator"  # API endpoint URL
         headers = {"Authorization": f"Bearer {api_key}"}
         payload = {"image": encoded_image}
 

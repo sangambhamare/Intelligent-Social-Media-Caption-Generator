@@ -6,7 +6,7 @@ st.title("Intelligent Social Media Caption Generator")
 st.write("Upload an image to generate social media captions and hashtags using OpenAI's GPT model.")
 
 # Fetch OpenAI API key from secrets
-api_key = st.secrets["openai_api_key"]  # Add your OpenAI API key to secrets.toml
+api_key = st.secrets["api_key"]  # Add your OpenAI API key to secrets.toml
 
 # Initialize OpenAI API key
 openai.api_key = api_key

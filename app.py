@@ -1,6 +1,5 @@
 import streamlit as st
 import requests
-import base64
 
 # Streamlit app setup
 st.title("Intelligent Social Media Caption Generator")
@@ -14,18 +13,14 @@ uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 
 if uploaded_file:
     try:
-        # Encode the image to base64
-        image_data = uploaded_file.read()
-        encoded_image = base64.b64encode(image_data).decode("utf-8")
-
-        # Send the image to the API
-        url = "https://chatgpt.com/g/g-6784114c670081919aa773a672118e24-intelligent-caption-generator"  # API endpoint URL
+        # Prepare the image to be sent as a file (multipart/form-data)
+        url = "https://chatgpt.com/g/g-6784114c670081919aa773a672118e24-intelligent-caption-generator"  # Replace with the correct API endpoint URL
         headers = {"Authorization": f"Bearer {api_key}"}
-        payload = {"image": encoded_image}
+        files = {"image": uploaded_file.getvalue()}
 
         # Make the API request
         with st.spinner("Generating captions..."):
-            response = requests.post(url, headers=headers, json=payload)
+            response = requests.post(url, headers=headers, files=files)
 
         # Parse and display the response
         if response.status_code == 200:

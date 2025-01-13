@@ -9,7 +9,7 @@ st.write("Upload an image to generate social media captions and hashtags using O
 api_key = st.secrets["api_key"]  # Add your OpenAI API key to secrets.toml
 
 # Initialize OpenAI API key
-openai.api_key = openai_api_key
+openai.api_key = api_key
 
 # Upload image
 uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])

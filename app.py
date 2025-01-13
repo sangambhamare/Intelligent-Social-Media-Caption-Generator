@@ -6,7 +6,7 @@ st.title("Intelligent Social Media Caption Generator")
 st.write("Upload an image to generate social media captions and hashtags using OpenAI's GPT model.")
 
 # Fetch OpenAI API key from secrets
-api_key = st.secrets["api_key"]  # Add your OpenAI API key to secrets.toml
+api_key = st.secrets["openai_api_key"]  # Add your OpenAI API key to secrets.toml
 
 # Initialize OpenAI API key
 openai.api_key = api_key
@@ -19,13 +19,15 @@ def generate_caption(image_description):
     """Generate captions using OpenAI's GPT model based on a text description of the image."""
     prompt = f"Generate a creative caption for the following image. The image contains: {image_description}. Caption:"
 
-    # OpenAI GPT request for caption generation
-    response = openai.Completion.create(
-        model="text-davinci-003",  # Use the appropriate GPT model
-        prompt=prompt,
-        max_tokens=50
+    # OpenAI GPT request for caption generation using ChatCompletion
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",  # Or choose a suitable model, like "gpt-4"
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ]
     )
-    return response.choices[0].text.strip()
+    return response['choices'][0]['message']['content'].strip()
 
 if uploaded_file:
     # Step 1: Allow the user to provide a description (since ChatGPT can't process the image itself)
